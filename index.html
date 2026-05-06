@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+
   <title>❤️Notes 192❤️</title>
+
   <style>
     body {
       font-family: Arial;
@@ -24,7 +27,7 @@
     }
 
     input {
-      width: 100%;
+      width: 94%;
       padding: 10px;
       margin: 5px 0;
       border-radius: 8px;
@@ -70,55 +73,110 @@
 
     <input id="judul" placeholder="Judul">
     <input id="isi" placeholder="Isi">
-    <button class="tambah" onclick="tambah()">Tambah</button>
+
+    <button class="tambah" onclick="tambah()">
+      Tambah
+    </button>
 
     <h3>Daftar Catatan</h3>
+
     <div id="list"></div>
   </div>
 
   <script>
     let editId = null;
 
+    const API =
+      "https://be-rest-1079290367613.us-central1.run.app/notes";
+
     function getNotes() {
-      fetch("/notes")
+      fetch(API)
         .then(res => res.json())
         .then(data => {
+
           let html = "";
+
           data.forEach(n => {
+
             html += `
               <div class="card">
+
                 <b>${n.judul}</b><br>
+
                 ${n.isi}<br>
+
                 <small>${n.tanggal_dibuat}</small><br>
 
-                <button class="edit" onclick="edit(${n.id}, '${n.judul}', '${n.isi}')">Edit</button>
-                <button class="hapus" onclick="hapus(${n.id})">Hapus</button>
+                <button
+                  class="edit"
+                  onclick="edit(${n.id}, '${n.judul}', '${n.isi}')"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="hapus"
+                  onclick="hapus(${n.id})"
+                >
+                  Hapus
+                </button>
+
               </div>
             `;
           });
+
           document.getElementById("list").innerHTML = html;
         });
     }
 
     function tambah() {
-      const judul = document.getElementById("judul").value;
-      const isi = document.getElementById("isi").value;
+
+      const judul =
+        document.getElementById("judul").value;
+
+      const isi =
+        document.getElementById("isi").value;
 
       if (editId) {
-        fetch("/notes/" + editId, {
+
+        fetch(API + "/" + editId, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ judul, isi })
-        }).then(() => {
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            judul,
+            isi
+          })
+        })
+
+        .then(() => {
+
           editId = null;
+
           getNotes();
         });
+
       } else {
-        fetch("/notes", {
+
+        fetch(API, {
+
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ judul, isi })
-        }).then(() => getNotes());
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            judul,
+            isi
+          })
+
+        })
+
+        .then(() => getNotes());
       }
 
       document.getElementById("judul").value = "";
@@ -126,17 +184,25 @@
     }
 
     function hapus(id) {
-      fetch("/notes/" + id, { method: "DELETE" })
-        .then(() => getNotes());
+
+      fetch(API + "/" + id, {
+        method: "DELETE"
+      })
+
+      .then(() => getNotes());
     }
 
     function edit(id, judul, isi) {
+
       document.getElementById("judul").value = judul;
+
       document.getElementById("isi").value = isi;
+
       editId = id;
     }
 
     getNotes();
+
   </script>
 </body>
 </html>
