@@ -1,0 +1,28 @@
+### 1. Lihat daftar catatan (GET)
+GET http://localhost:3000/notes
+Content-Type: application/json
+
+
+### 2. Tambah catatan (POST)
+POST http://localhost:3000/notes
+Content-Type: application/json
+
+{
+  "judul": "Belajar API",
+  "isi": "Ini contoh tambah catatan"
+}
+
+
+### 3. Edit catatan (PUT)
+PUT http://localhost:3000/notes/1
+Content-Type: application/json
+
+{
+  "judul": "Belajar API Update",
+  "isi": "Catatan sudah diubah"
+}
+
+
+### 4. Hapus catatan (DELETE)
+DELETE http://localhost:3000/notes/1
+Content-Type: application/json
